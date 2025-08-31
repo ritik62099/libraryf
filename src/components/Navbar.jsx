@@ -167,7 +167,7 @@
 
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import "../style/Navbar.css";
+import "../style/navbar.css";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
