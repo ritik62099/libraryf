@@ -483,32 +483,7 @@ function Dashboard() {
     setStudents(data);
   };
 
-  // const handleAddStudent = async (e) => {
-  //   e.preventDefault();
-  //   setErrorMsg("");
-
-  //   if (!newStudent.name || !newStudent.roll) {
-  //     setErrorMsg("Name & Roll are required!");
-  //     return;
-  //   }
-
-  //   try {
-  //     await addStudent(newStudent);
-  //     setNewStudent({ name: "", roll: "", mobile: "", address: "", monthlyFee: "" });
-  //     fetchStudents();
-  //     alert("Student added successfully!");
-  //   } catch (error) {
-  //     const msg = error?.response?.data?.message || error.message || "";
-  //     if (msg.includes("E11000 duplicate key")) {
-  //       const match = msg.match(/index: (\w+)_1 dup key/);
-  //       const field = match ? match[1] : "field";
-  //       setErrorMsg(`${field.charAt(0).toUpperCase() + field.slice(1)} already exists!`);
-  //     } else {
-  //       setErrorMsg("Something went wrong. Please try again.");
-  //     }
-  //   }
-  // };
-
+  
   const handleAddStudent = async (e) => {
   e.preventDefault();
   setErrorMsg("");
@@ -543,13 +518,38 @@ function Dashboard() {
   };
 
   const handleDownloadQR = () => {
-    const canvas = qrRef.current.querySelector("canvas");
-    const url = canvas.toDataURL("image/png");
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "attendance-qr.png";
-    link.click();
-  };
+  const qrCanvas = qrRef.current.querySelector("canvas");
+  const qrSize = qrCanvas.width;
+  const margin = 40; // Har side se 40px margin
+
+  // Naya canvas jisme margin + text bhi ho
+  const newCanvas = document.createElement("canvas");
+  const newSize = qrSize + margin * 2;
+  newCanvas.width = newSize;
+  newCanvas.height = newSize + 60; // Extra jagah text ke liye niche
+  const ctx = newCanvas.getContext("2d");
+
+  // Background white
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, newCanvas.width, newCanvas.height);
+
+  // QR ko beech me draw karo
+  ctx.drawImage(qrCanvas, margin, margin);
+
+  // Niche text add karo
+  ctx.fillStyle = "#000000";
+  ctx.font = "20px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText("Scan to mark attendance", newCanvas.width / 2, newSize + 35);
+
+  // Download trigger karo
+  const url = newCanvas.toDataURL("image/png");
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "attendance-qr.png";
+  link.click();
+};
+
 
   const togglePayment = async (studentId) => {
     await payStudentFee(studentId); // ✅ Marks as paid and resets next month automatically
