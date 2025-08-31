@@ -1,175 +1,11 @@
-// // import { Link, useNavigate } from "react-router-dom";
-// // import { useState, useEffect } from "react";
-// // import "../style/Navbar.css";
-
-// // function Navbar() {
-// //   const [isOpen, setIsOpen] = useState(false);
-// //   const [isLoggedIn, setIsLoggedIn] = useState(false);
-// //   const navigate = useNavigate();
-
-// //   // 🔹 Page load hone par check karo
-// //   useEffect(() => {
-// //     const token = localStorage.getItem("token");
-// //     setIsLoggedIn(!!token); // agar token hai to true
-// //   }, []);
-
-// //   // logout
-// //   const handleLogout = () => {
-// //     localStorage.removeItem("token"); 
-// //     setIsLoggedIn(false); // UI update
-// //     navigate("/login");
-// //   };
-
-// //   return (
-// //     <nav className="navbar">
-// //       <div className="nav-container">
-// //         {/* Logo / Title */}
-// //         <Link to="/" className="logo">
-// //           📚 Library Tracker
-// //         </Link>
-
-// //         {/* Desktop Menu */}
-// //         <div className="nav-links">
-// //           <Link to="/dashboard">Dashboard</Link>
-// //           <Link to="/attendance">Attendance</Link>
-
-// //           {isLoggedIn ? (
-// //             <button onClick={handleLogout} className="logout-btn">
-// //               Logout
-// //             </button>
-// //           ) : (
-// //             <Link to="/login" className="login-btn">
-// //               Login
-// //             </Link>
-// //           )}
-// //         </div>
-
-// //         {/* Mobile Menu Button */}
-// //         <div className="menu-toggle" onClick={() => setIsOpen(!isOpen)}>
-// //           ☰
-// //         </div>
-// //       </div>
-
-// //       {/* Mobile Menu */}
-// //       {isOpen && (
-// //         <div className="mobile-menu">
-// //           <Link to="/dashboard">Dashboard</Link>
-// //           <Link to="/attendance">Attendance</Link>
-// //           {isLoggedIn ? (
-// //             <button onClick={handleLogout} className="logout-btn">
-// //               Logout
-// //             </button>
-// //           ) : (
-// //             <Link to="/login" className="login-btn">
-// //               Login
-// //             </Link>
-// //           )}
-// //         </div>
-// //       )}
-// //     </nav>
-// //   );
-// // }
-
-// // export default Navbar;
-
-
-// import { Link, useNavigate } from "react-router-dom";
-// import { useState, useEffect } from "react";
-// import "../style/Navbar.css";
-
-// function Navbar() {
-//   const [isOpen, setIsOpen] = useState(false);
-//   const [isLoggedIn, setIsLoggedIn] = useState(false);
-//   const navigate = useNavigate();
-
-//   // 🔹 token check function
-//   const checkAuth = () => {
-//     const token = localStorage.getItem("token");
-//     setIsLoggedIn(!!token);
-//   };
-
-//   useEffect(() => {
-//     checkAuth();
-
-//     // 🔹 Listen to storage changes (for multi-tabs or same app update)
-//     window.addEventListener("storage", checkAuth);
-
-//     // 🔹 Custom event listener
-//     window.addEventListener("authChange", checkAuth);
-
-//     return () => {
-//       window.removeEventListener("storage", checkAuth);
-//       window.removeEventListener("authChange", checkAuth);
-//     };
-//   }, []);
-
-//   // logout
-//   const handleLogout = () => {
-//     localStorage.removeItem("token");
-//     setIsLoggedIn(false);
-//     // 🔹 Trigger custom event so Navbar update ho jaye bina refresh
-//     window.dispatchEvent(new Event("authChange"));
-//     navigate("/login");
-//   };
-
-//   return (
-//     <nav className="navbar">
-//       <div className="nav-container">
-//         {/* Logo / Title */}
-//         <Link to="/" className="logo">
-//           📚 Library Tracker
-//         </Link>
-
-//         {/* Desktop Menu */}
-//         <div className="nav-links">
-//           <Link to="/dashboard">Dashboard</Link>
-//           <Link to="/attendance">Attendance</Link>
-
-//           {isLoggedIn ? (
-//             <button onClick={handleLogout} className="logout-btn">
-//               Logout
-//             </button>
-//           ) : (
-//             <Link to="/login" className="login-btn">
-//               Login
-//             </Link>
-//           )}
-//         </div>
-
-//         {/* Mobile Menu Button */}
-//         <div className="menu-toggle" onClick={() => setIsOpen(!isOpen)}>
-//           ☰
-//         </div>
-//       </div>
-
-//       {/* Mobile Menu */}
-//       {isOpen && (
-//         <div className="mobile-menu">
-//           <Link to="/dashboard">Dashboard</Link>
-//           <Link to="/attendance">Attendance</Link>
-//           {isLoggedIn ? (
-//             <button onClick={handleLogout} className="logout-btn">
-//               Logout
-//             </button>
-//           ) : (
-//             <Link to="/login" className="login-btn">
-//               Login
-//             </Link>
-//           )}
-//         </div>
-//       )}
-//     </nav>
-//   );
-// }
-
-// export default Navbar;
-
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
   const navigate = useNavigate();
 
   const checkAuth = () => {
@@ -182,9 +18,13 @@ function Navbar() {
     window.addEventListener("storage", checkAuth);
     window.addEventListener("authChange", checkAuth);
 
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+
     return () => {
       window.removeEventListener("storage", checkAuth);
       window.removeEventListener("authChange", checkAuth);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -193,13 +33,14 @@ function Navbar() {
     setIsLoggedIn(false);
     window.dispatchEvent(new Event("authChange"));
     navigate("/login");
+    setIsOpen(false);
   };
 
   const handleLogin = () => {
     navigate("/login");
+    setIsOpen(false);
   };
 
-  // ==== Internal CSS ====
   const styles = {
     navbar: {
       backgroundColor: "#1e40af",
@@ -224,10 +65,17 @@ function Navbar() {
       cursor: "pointer",
     },
     navLinks: {
-      display: "flex",
-      gap: "1.5rem",
-      flexDirection: "row",
-    },
+  flexDirection: isMobile ? "column" : "row",
+  position: isMobile ? "absolute" : "static",
+  top: isMobile ? "64px" : "auto",
+  left: 0,
+  width: isMobile ? "100%" : "auto",
+  backgroundColor: isMobile ? "#2563eb" : "transparent",
+  padding: isMobile ? "1rem" : 0,
+  display: isMobile ? (isOpen ? "flex" : "none") : "flex", // ✅ only once
+  gap: isMobile ? "0.8rem" : "1.5rem",
+  zIndex: 90,
+},
     navLink: {
       color: "white",
       fontWeight: 500,
@@ -251,16 +99,9 @@ function Navbar() {
       cursor: "pointer",
     },
     menuToggle: {
-      display: "none",
+      display: isMobile ? "block" : "none",
       fontSize: "1.5rem",
       cursor: "pointer",
-    },
-    mobileMenu: {
-      display: "none",
-      flexDirection: "column",
-      backgroundColor: "#2563eb",
-      padding: "1rem",
-      gap: "0.8rem",
     },
   };
 
@@ -272,17 +113,8 @@ function Navbar() {
           📚 Library Tracker
         </div>
 
-        {/* Desktop & Mobile Links */}
-        <div
-          style={{
-            ...styles.navLinks,
-            display: window.innerWidth <= 768 ? (isOpen ? "flex" : "none") : "flex",
-            flexDirection: window.innerWidth <= 768 ? "column" : "row",
-            gap: window.innerWidth <= 768 ? "0.8rem" : "1.5rem",
-            backgroundColor: window.innerWidth <= 768 ? "#2563eb" : "transparent",
-            padding: window.innerWidth <= 768 ? "1rem" : 0,
-          }}
-        >
+        {/* Menu Links */}
+        <div style={styles.navLinks}>
           <div style={styles.navLink} onClick={() => { navigate("/dashboard"); setIsOpen(false); }}>
             Dashboard
           </div>
@@ -297,27 +129,18 @@ function Navbar() {
           </div>
 
           {isLoggedIn ? (
-            <button
-              style={styles.logoutBtn}
-              onClick={() => { handleLogout(); setIsOpen(false); }}
-            >
+            <button style={styles.logoutBtn} onClick={handleLogout}>
               Logout
             </button>
           ) : (
-            <button style={styles.loginBtn} onClick={() => { handleLogin(); setIsOpen(false); }}>
+            <button style={styles.loginBtn} onClick={handleLogin}>
               Login
             </button>
           )}
         </div>
 
         {/* Mobile Menu Toggle */}
-        <div
-          style={{
-            ...styles.menuToggle,
-            display: window.innerWidth <= 768 ? "block" : "none",
-          }}
-          onClick={() => setIsOpen(!isOpen)}
-        >
+        <div style={styles.menuToggle} onClick={() => setIsOpen(!isOpen)}>
           ☰
         </div>
       </div>
