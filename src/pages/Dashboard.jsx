@@ -497,17 +497,16 @@ function Dashboard() {
       await addStudent(newStudent);
       setNewStudent({ name: "", roll: "", mobile: "", address: "", monthlyFee: "" });
       fetchStudents();
-      alert("Student added successfully!");
     } catch (error) {
-      // Internal error handling, but do not show in UI
-      console.error("Error adding student:", error); // optional for debugging
+      console.error("Error adding student:", error);
     }
   }
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this student?")) {
+    try {
       await deleteStudent(id);
       fetchStudents();
-      alert("Student deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting student:", error);
     }
   };
 
