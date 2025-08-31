@@ -211,7 +211,7 @@
 //       </div>
 
 //       {/* Reports */}
-     
+
 //     </div>
 //   );
 // }
@@ -483,32 +483,26 @@ function Dashboard() {
     setStudents(data);
   };
 
-  
+
   const handleAddStudent = async (e) => {
-  e.preventDefault();
-  setErrorMsg("");
+    e.preventDefault();
+    setErrorMsg("");
 
-  if (!newStudent.name || !newStudent.roll) {
-    setErrorMsg("Name & Roll are required!");
-    return;
-  }
+    if (!newStudent.name || !newStudent.roll) {
+      setErrorMsg("Name & Roll are required!");
+      return;
+    }
 
-  try {
-    await addStudent(newStudent);
-    setNewStudent({ name: "", roll: "", mobile: "", address: "", monthlyFee: "" });
-    fetchStudents();
-    alert("Student added successfully!");
-  } catch (error) {
-    const msg = error?.response?.data?.message || error.message || "";
-    if (msg.includes("Roll number already exists")) {
-      setErrorMsg("Roll number already exists for this admin!");
-    } else {
-      setErrorMsg(msg || "Something went wrong. Please try again.");
+    try {
+      await addStudent(newStudent);
+      setNewStudent({ name: "", roll: "", mobile: "", address: "", monthlyFee: "" });
+      fetchStudents();
+      alert("Student added successfully!");
+    } catch (error) {
+      // Internal error handling, but do not show in UI
+      console.error("Error adding student:", error); // optional for debugging
     }
   }
-};
-
-
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this student?")) {
       await deleteStudent(id);
@@ -517,38 +511,39 @@ function Dashboard() {
     }
   };
 
+
   const handleDownloadQR = () => {
-  const qrCanvas = qrRef.current.querySelector("canvas");
-  const qrSize = qrCanvas.width;
-  const margin = 40; // Har side se 40px margin
+    const qrCanvas = qrRef.current.querySelector("canvas");
+    const qrSize = qrCanvas.width;
+    const margin = 40; // Har side se 40px margin
 
-  // Naya canvas jisme margin + text bhi ho
-  const newCanvas = document.createElement("canvas");
-  const newSize = qrSize + margin * 2;
-  newCanvas.width = newSize;
-  newCanvas.height = newSize + 60; // Extra jagah text ke liye niche
-  const ctx = newCanvas.getContext("2d");
+    // Naya canvas jisme margin + text bhi ho
+    const newCanvas = document.createElement("canvas");
+    const newSize = qrSize + margin * 2;
+    newCanvas.width = newSize;
+    newCanvas.height = newSize + 60; // Extra jagah text ke liye niche
+    const ctx = newCanvas.getContext("2d");
 
-  // Background white
-  ctx.fillStyle = "#ffffff";
-  ctx.fillRect(0, 0, newCanvas.width, newCanvas.height);
+    // Background white
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, newCanvas.width, newCanvas.height);
 
-  // QR ko beech me draw karo
-  ctx.drawImage(qrCanvas, margin, margin);
+    // QR ko beech me draw karo
+    ctx.drawImage(qrCanvas, margin, margin);
 
-  // Niche text add karo
-  ctx.fillStyle = "#000000";
-  ctx.font = "20px Arial";
-  ctx.textAlign = "center";
-  ctx.fillText("Scan to mark attendance", newCanvas.width / 2, newSize + 35);
+    // Niche text add karo
+    ctx.fillStyle = "#000000";
+    ctx.font = "20px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("Scan to mark attendance", newCanvas.width / 2, newSize + 35);
 
-  // Download trigger karo
-  const url = newCanvas.toDataURL("image/png");
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "attendance-qr.png";
-  link.click();
-};
+    // Download trigger karo
+    const url = newCanvas.toDataURL("image/png");
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "attendance-qr.png";
+    link.click();
+  };
 
 
   const togglePayment = async (studentId) => {
