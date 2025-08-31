@@ -64,18 +64,20 @@ function Navbar() {
       fontWeight: "bold",
       cursor: "pointer",
     },
-    navLinks: {
+  navLinks: {
   flexDirection: isMobile ? "column" : "row",
   position: isMobile ? "absolute" : "static",
   top: isMobile ? "64px" : "auto",
   left: 0,
-  width: isMobile ? "100%" : "auto",
+  width: isMobile ? "calc(100% - 0rem)" : "auto", // ✅ adjusted for container padding
   backgroundColor: isMobile ? "#2563eb" : "transparent",
   padding: isMobile ? "1rem" : 0,
-  display: isMobile ? (isOpen ? "flex" : "none") : "flex", // ✅ only once
+  display: isMobile ? (isOpen ? "flex" : "none") : "flex",
   gap: isMobile ? "0.8rem" : "1.5rem",
   zIndex: 90,
+  boxSizing: "border-box", // ✅ ensures padding inside width
 },
+
     navLink: {
       color: "white",
       fontWeight: 500,
