@@ -606,7 +606,7 @@ function Dashboard() {
           <h2 className="card-title">📲 Attendance QR</h2>
           <div className="qr-pulse" ref={qrRef}>
             <QRCodeCanvas
-              value="https://libraryapi-mu.vercel.app/attendance"
+              value="https://libraryf.vercel.app/attendance"
               size={160}
               bgColor="#ffffff"
               fgColor="#000000"
