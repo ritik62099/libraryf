@@ -1,0 +1,278 @@
+/* === Global Layout === */
+.dashboard {
+  width: 100%;
+  min-height: 100vh;        /* full height screen */
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  box-sizing: border-box;
+}
+
+/* === Title === */
+.dashboard-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  text-align: center;
+  background: linear-gradient(90deg, #2563eb, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+}
+
+/* === Cards === */
+.card {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+}
+
+.card-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #111827;
+}
+
+/* === Grid Layouts === */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  width: 100%;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
+  width: 100%;
+}
+
+@media (max-width: 960px) {
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* === Form === */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-grid input {
+  padding: 0.7rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-grid input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  outline: none;
+}
+
+.btn-primary {
+  grid-column: span 2;
+  padding: 0.8rem;
+  background: linear-gradient(90deg, #2563eb, #1d4ed8);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(90deg, #1d4ed8, #2563eb);
+  transform: translateY(-2px);
+}
+
+/* === Tables === */
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 0.75rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+thead tr {
+  background: #f3f4f6;
+  text-align: left;
+}
+
+th, td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+tbody tr {
+  transition: background 0.2s ease;
+}
+
+tbody tr:hover {
+  background: #f9fafb;
+}
+
+/* === Attendance Status === */
+.status {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.status.present {
+  color: #16a34a;
+  background: rgba(22, 163, 74, 0.1);
+}
+
+.status.absent {
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.1);
+}
+
+/* === QR Code === */
+.qr-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.qr-pulse {
+  position: relative;
+  padding: 0.6rem;
+  border-radius: 0.75rem;
+}
+
+.qr-pulse::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 0.75rem;
+  background: rgba(37, 99, 235, 0.08);
+  filter: blur(12px);
+  animation: pulse 2.6s ease-in-out infinite;
+}
+
+.qrcode {
+  border-radius: 0.5rem;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.98); opacity: 0.7; }
+  50% { transform: scale(1.02); opacity: 0.4; }
+  100% { transform: scale(0.98); opacity: 0.7; }
+}
+
+/* === Meta text === */
+.meta {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+
+.error-text {
+  color: #ff4d4f;   /* red-ish */
+  background: #fff1f0;
+  border: 1px solid #ffa39e;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+.paid-badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.5rem;
+  background: rgba(22, 163, 74, 0.1);
+  color: #16a34a;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+
+/* === Form Responsive === */
+@media (max-width: 640px) {
+  .form-grid {
+    grid-template-columns: 1fr; /* stack inputs vertically */
+    gap: 0.8rem;
+  }
+
+  .btn-primary {
+    grid-column: span 1; /* button full width */
+  }
+}
+
+/* === QR & Add Student Cards === */
+@media (max-width: 640px) {
+  .grid-2 {
+    grid-template-columns: 1fr; /* stack cards vertically */
+  }
+
+  .qr-card {
+    margin-top: 1rem;
+  }
+}
+
+/* === Table Scroll & Padding === */
+@media (max-width: 640px) {
+  table {
+    font-size: 0.85rem;
+  }
+
+  th, td {
+    padding: 0.5rem 0.7rem;
+  }
+}
+
+/* === QR Code Adjustments === */
+@media (max-width: 640px) {
+  .qrcode {
+    width: 140px !important;
+    height: 140px !important;
+  }
+
+  .qr-pulse::before {
+    filter: blur(8px);
+  }
+}
+
+/* === Meta Text === */
+@media (max-width: 640px) {
+  .meta {
+    font-size: 0.85rem;
+  }
+}
+
+/* === Error Text === */
+@media (max-width: 640px) {
+  .error-text {
+    font-size: 0.85rem;
+    padding: 4px 8px;
+  }
+}
