@@ -601,6 +601,7 @@ function Dashboard() {
           <div className="qr-pulse" ref={qrRef}>
             <QRCodeCanvas
               value="https://libraryf.vercel.app/attendance"
+              // value="http://localhost:5000/attendance"
               size={160}
               bgColor="#ffffff"
               fgColor="#000000"
