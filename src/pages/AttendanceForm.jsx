@@ -97,12 +97,12 @@ function AttendanceForm() {
         { roll, name, admin: adminId } // ✅ adminId included
       );
 
-      alert(res.data.message || "✅ Attendance marked successfully!");
+      alert("✅ Attendance marked successfully!");
       setRoll("");
       setName("");
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Failed to mark attendance");
+      alert("Failed to mark attendance");
     } finally {
       setLoading(false);
     }
