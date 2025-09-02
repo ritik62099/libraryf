@@ -450,6 +450,9 @@
 
 
 
+
+
+
 import { useEffect, useState, useRef } from "react";
 import {
   getStudents,
@@ -494,12 +497,13 @@ function Dashboard() {
     }
 
     try {
-      await addStudent(newStudent);
-      setNewStudent({ name: "", roll: "", mobile: "", address: "", monthlyFee: "" });
-      fetchStudents();
-    } catch (error) {
-      console.error("Error adding student:", error);
-    }
+  await addStudent(newStudent);
+  setNewStudent({ name: "", roll: "", mobile: "", address: "", monthlyFee: "" });
+  fetchStudents();
+} catch (error) {
+  console.error("Error adding student:", error.response?.data || error.message);
+  alert(error.response?.data?.message || "Failed to add student");
+}
   }
   const handleDelete = async (id) => {
     try {
@@ -599,15 +603,17 @@ function Dashboard() {
         <div className="card qr-card">
           <h2 className="card-title">📲 Attendance QR</h2>
           <div className="qr-pulse" ref={qrRef}>
+           
+             
+
             <QRCodeCanvas
-              value="https://libraryf.vercel.app/attendance"
-              // value="http://localhost:5000/attendance"
-              size={160}
-              bgColor="#ffffff"
-              fgColor="#000000"
-              level="H"
-              className="qrcode"
-            />
+  value={`https://libraryf.vercel.app/attendance?admin=${localStorage.getItem("adminId")}`}
+  size={160}
+  bgColor="#ffffff"
+  fgColor="#000000"
+  level="H"
+  className="qrcode"
+/>
           </div>
           <button onClick={handleDownloadQR} className="btn-primary mt-2">
             Download QR
